@@ -1,39 +1,29 @@
 import 'package:demo/api_services.dart';
-import 'package:demo/custom_card.dart';
-import 'package:demo/update.dart';
 import 'package:flutter/material.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({ Key? key }) : super(key: key);
+class UpdateScreen extends StatefulWidget {
+  final String title;
+  final String? id;
+ UpdateScreen({ Key? key,required this.title,this.id}) : super(key: key);
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  State<UpdateScreen> createState() => _UpdateScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  ApiServices apiServices=ApiServices();
-  var _titleEditingController=TextEditingController();
-
-
-List tasks=[];
-
-getData()async{
- tasks=await apiServices.getAlbum();
-
-}
-@override
+class _UpdateScreenState extends State<UpdateScreen> {
+  final ApiServices apiServices=ApiServices();
+   TextEditingController? _titleEditingController;
+  @override
   void initState() {
-    getData();
+     _titleEditingController=TextEditingController(text: widget.title);
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text("Rest Api CRUD"),
+          title: Text("Upadate Task Title"),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -71,27 +61,12 @@ getData()async{
                  ),
                  ElevatedButton(
                    onPressed: (){
-                     var title=_titleEditingController.text;
-                     apiServices.sendAlbum(title);
+                    apiServices.updateAlbum(widget.title, widget.id);
                    }, 
-                   child: Text("Save")
+                   child: Text("Update")
                   ),
                   SizedBox(height: 25,),
-                  ...tasks.map((task){
-                    return  CustomCard(
-                       title:task["title"] ,
-                      updateFunction: (){
-                        Route route=MaterialPageRoute(
-                        builder: (_)=>UpdateScreen(
-                          title:task["title"] ,id: task["id"].toString(),));
-                          Navigator.push(context, route);
-                      },
-                      deleteFunction: (){
-                        apiServices.deleteAlbum(task["id"],);
-                      },
-                   
-                  );
-                  })
+                  
                  
               ],
             ),
@@ -100,4 +75,3 @@ getData()async{
       );
   }
 }
-
