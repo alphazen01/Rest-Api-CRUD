@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 
 class CustomCard extends StatelessWidget {
   final String title;
+   final VoidCallback? updateFunction;
+   final VoidCallback? deleteFunction;
    CustomCard({
-    Key? key,required this.title
+    Key? key,required this.title,this.updateFunction,this.deleteFunction
   }) : super(key: key);
 
   @override
@@ -15,7 +17,7 @@ class CustomCard extends StatelessWidget {
         child: Row(
           children: [
             IconButton(
-              onPressed: (){}, 
+              onPressed: updateFunction, 
               icon: Icon(Icons.edit,color: Colors.red,)
             ),
             Expanded(
@@ -28,7 +30,7 @@ class CustomCard extends StatelessWidget {
               ),
             ),
              IconButton(
-              onPressed: (){}, 
+              onPressed: deleteFunction, 
               icon: Icon(Icons.delete,color: Colors.red,)
             ),
           ],
